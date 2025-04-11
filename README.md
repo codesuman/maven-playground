@@ -1,7 +1,4 @@
-<<<<<<< Updated upstream
 # Maven Playground
-=======
-# maven-playground
 
 ## Creating the Math Library (Math Lib)
 
