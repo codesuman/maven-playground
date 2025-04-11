@@ -96,5 +96,16 @@ mvn clean install
 
 ```mvn install```: Compiles the code, runs any tests (if you had them), packages the code into a JAR file, and installs the JAR into your local Maven repository (```~/.m2/repository```).
 
-After successful execution, you will find the math-lib-1.0-SNAPSHOT.jar file in the math-lib/target directory, and it will also be installed in your local Maven repository.
+:clap::beers: After successful execution, you will find the math-lib-1.0-SNAPSHOT.jar file in the math-lib/target directory, and it will also be installed in your local Maven repository.
 
+After running mvn install, Maven will create a directory structure under your ~/.m2/repository that looks like this:
+
+```
+~/.m2/repository/
+└── org/
+└── example/
+└── math-lib/
+└── 1.0-SNAPSHOT/
+├── math-lib-1.0-SNAPSHOT.jar
+└── math-lib-1.0-SNAPSHOT.pom
+```
