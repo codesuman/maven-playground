@@ -1,1 +1,1 @@
-# maven-playground
+# Maven Playground
