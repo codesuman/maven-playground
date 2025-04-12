@@ -137,7 +137,7 @@ java -jar target/math-app-1.0-SNAPSHOT.jar
 
 #### Explanation of the commands:
 
-* ```mvn clean package```: Cleans the target directory and then compiles the code and packages it into an executable JAR file (math-app-1.0-SNAPSHOT.jar) in the target directory. Maven will automatically download and include the math-lib-1.0-SNAPSHOT.jar from your local repository because you declared it as a dependency in the pom.xml.
+* ```mvn clean package```: Cleans the target directory and then compiles the code and packages it into an executable JAR file (`math-app-1.0-SNAPSHOT.jar`) in the target directory. Maven will automatically download and include the `math-lib-1.0-SNAPSHOT.jar` from your local repository because you declared it as a dependency in the pom.xml.
 * ```java -jar target/math-app-1.0-SNAPSHOT.jar```: Executes the JAR file of your application.
 
 #### Expected Output:
