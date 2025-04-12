@@ -1,6 +1,6 @@
 # Maven Playground
 
-Go through below steps to learn all about Maven 
+### :hourglass_flowing_sand: Go through below steps to learn more about Maven 
 
 [Creating ```Library``` with Maven](https://github.com/codesuman/maven-playground/tree/math-lib)
 
