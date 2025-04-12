@@ -1,46 +1,38 @@
 # Maven Playground
 
-## Creating a Maven Project to Use the Math Library
+## Creating a Maven Monorepo
 
 ### Step 1: Set up the Project Structure
 
-Create a new directory for your application project. Let's call it math-app. Inside this directory, create the standard Maven project structure:
+Structuring a MonoRepo with `math-lib` and `math-app` Maven projects involves creating a parent Maven project that manages both as modules.
+
+Recommended MonoRepo Structure:
 
 ```
-math-app/
-├── src/
-│   └── main/
-│       └── java/
-│           └── org/example/math/app
-└── pom.xml
+math-mono-repo/
+├── math-lib/
+│   ├── src/
+│   │   └── main/
+│   │       └── java/
+│   │           └── com/example/math/
+│   └── pom.xml
+├── math-app/
+│   ├── src/
+│   │   └── main/
+│   │       └── java/
+│   │           └── com/example/app/
+│   └── pom.xml
+└── pom.xml         (Parent POM)
 ```
 
-### Step 2: Create the Application Code (Java Code)
+#### Explanation:
 
-Inside the src/main/java/org/example/math/app/ directory, create a Java file named App.java:
+* ```mono-repo/```: This is the root directory of the MonoRepo.
+* ```math-lib/```: Existing Math Library project. Its internal structure `(src/main/java, pom.xml)` remains largely the same.
+* ```math-app/```: Your existing application project. Its internal structure `(src/main/java, pom.xml)` also remains largely the same.
+* ```pom.xml``` **(at the root)**: This will be the Parent POM file. It will define the common configurations and list `math-lib` and `math-app` as modules.
 
-```java
-package org.example.math.app;
-
-import org.example.math.libs.MathUtils;
-
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
-
-        int x = 10;
-        int y = 5;
-
-        System.out.println("Sum : " + MathUtils.add(x,y));
-        System.out.println("Subtract : " + MathUtils.subtract(x,y));
-        System.out.println("Product : " + MathUtils.multiply(x,y));
-    }
-}
-```
-
-### Step 3: Create the Maven POM File (pom.xml)
-
-Inside the math-app directory, create a file named pom.xml with the following content:
+### Step 2: Create Parent POM (`math-mono-repo/pom.xml`):
 
 ```XML
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -48,104 +40,118 @@ Inside the math-app directory, create a file named pom.xml with the following co
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>math-app</artifactId>
+    <artifactId>math-mono-repo</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
-    <name>Math Application</name>
+    <name>MonoRepo for Math Library and Application</name>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.example</groupId>
-            <artifactId>math-lib</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>math-lib</module>
+        <module>math-app</module>
+    </modules>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <archive>
-                                <manifest>
-                                    <mainClass>org.example.math.app.Main</mainClass>
-                                </manifest>
-                            </archive>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                            <appendAssemblyId>false</appendAssemblyId>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>
 ```
 
-:ledger: Explanation of pom.xml (for math-app):
+:ledger: Explanation of the Parent POM:
 
-Most of the basic elements (modelVersion, groupId, artifactId, version, packaging, name, properties, maven-compiler-plugin) are similar to the math-lib project.
-```<dependencies>```: This section lists the external libraries that your project depends on.
-```<dependency>```: Defines a single dependency.
-```<groupId>org.example</groupId>```: The groupId of the Math Library.
-```<artifactId>math-lib</artifactId>```: The artifactId of the Math Library.
-```<version>1.0-SNAPSHOT</version>```: The version of the Math Library you want to use. Make sure this matches the version of the JAR you installed.
-```<build> and <plugins>```:
-```maven-compiler-plugin```: For compiling the application code.
+* ```<packaging>pom</packaging>```: This indicates that this POM is for managing other Maven projects (modules) and doesn't produce an artifact itself.
+* ```<modules>```: This section lists the sub-projects (modules) that are part of this MonoRepo. Here, we specify ```math-lib``` and ```math-app```. Maven will look for ```pom.xml``` files in these directories.
+* ```<properties>```: You can define common properties here that can be inherited by the modules (like the Java source and target versions).
+* ```<build><pluginManagement>```: This section allows you to define plugin configurations that will be used by the child modules unless they override them. This helps in maintaining consistent build configurations across your projects.
 
+### Step 3: Updating Child Modules POM
 
-:ledger: Explanation of the maven-assembly-plugin configuration:
+`math-lib/pom.xml` **(Child Module):**
 
-```<artifactId>maven-assembly-plugin</artifactId>```: Specifies the plugin to use.
-```<executions>```: Configures when and how the plugin should run.
-```<execution>```: Defines a specific execution of the plugin.
-```<phase>package</phase>```: The plugin will run during the package phase of the Maven build lifecycle.
-```<goals><goal>single</goal></goals>```: The single goal tells the plugin to create a single assembled archive.
-```<configuration>```: Configures the assembly process.
-```<archive><manifest><mainClass>org.example.math.app.Main</mainClass></manifest></archive>```: Specifies the main class for the executable JAR.
-```<descriptorRefs><descriptorRef>jar-with-dependencies</descriptorRef></descriptorRef>```: This tells the plugin to create a JAR that includes all the project's dependencies.
-```<appendAssemblyId>false</appendAssemblyId>```: This prevents the plugin from appending an extra identifier to the output JAR name.
+This file will be very similar to original `math-lib/pom.xml`, but we can remove the `<properties>` and `<build>` sections if we want to inherit them from the parent POM.
 
-### Step 4: Build and Run the Application
+```XML
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.example</groupId>
+        <artifactId>math-mono-repo</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-:computer: Open your terminal or command prompt, navigate to the math-app directory, and run the following Maven commands:
-
-```Bash
-mvn clean package
-java -jar target/math-app-1.0-SNAPSHOT.jar
+    <artifactId>math-lib</artifactId>
+    <packaging>jar</packaging>
+    <name>Math Library</name>
+</project>
 ```
 
-#### Explanation of the commands:
+#### Key changes in `math-lib/pom.xml`:
 
-```mvn clean package```: Cleans the target directory and then compiles the code and packages it into an executable JAR file (math-app-1.0-SNAPSHOT.jar) in the target directory. Maven will automatically download and include the math-lib-1.0-SNAPSHOT.jar from your local repository because you declared it as a dependency in the pom.xml.
-```java -jar target/math-app-1.0-SNAPSHOT.jar```: Executes the JAR file of your application.
+* ```<parent>```: This section specifies the parent POM.
+* ```<groupId>```, ```<artifactId>```, ```<version>```: Must match the parent POM.
+* ```<relativePath>../pom.xml</relativePath>```: Specifies the relative path to the parent POM file from the current module's directory.
 
-#### Expected Output:
+`math-app/pom.xml` **(Child Module):**
 
+Similarly, let's update `math-app/pom.xml` to inherit from the parent and adjust the dependency on `math-lib`.
+
+```XML
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.example</groupId>
+        <artifactId>math-mono-repo</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>math-app</artifactId>
+    <packaging>jar</packaging>
+    <name>Math Application</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>math-lib</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>
 ```
-Sum: 15
-Difference: 5
-Product: 50
-```
+
+#### Key changes in `math-app/pom.xml`:
+
+* ```<parent>```: This section specifies the parent POM.
+* ```<dependencies><dependency><version>${project.version}</version></dependency>```: Here, we use the `${project.version}` property, which will inherit the version defined in the parent POM. This helps keep the versions of related modules consistent.
+* ```<build>```: This section for maven-jar-plugin and maven-assembly-plugin remains similar.
 
 :clap::beers: Congratulations! You have successfully created a simple Math Library JAR using Maven and then used it in another Maven project. This demonstrates the basic principles of creating and using Maven dependencies.
