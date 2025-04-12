@@ -14,13 +14,13 @@ math-mono-repo/
 │   ├── src/
 │   │   └── main/
 │   │       └── java/
-│   │           └── com/example/math/
+│   │           └── org/example/math/libs
 │   └── pom.xml
 ├── math-app/
 │   ├── src/
 │   │   └── main/
 │   │       └── java/
-│   │           └── com/example/app/
+│   │           └── org/example/math/app/
 │   └── pom.xml
 └── pom.xml         (Parent POM)
 ```
@@ -82,7 +82,7 @@ math-mono-repo/
 </project>
 ```
 
-:ledger: Explanation of the Parent POM:
+#### :ledger: Explanation of the Parent POM:
 
 * ```<packaging>pom</packaging>```: This indicates that this POM is for managing other Maven projects (modules) and doesn't produce an artifact itself.
 * ```<modules>```: This section lists the sub-projects (modules) that are part of this MonoRepo. Here, we specify ```math-lib``` and ```math-app```. Maven will look for ```pom.xml``` files in these directories.
@@ -112,7 +112,7 @@ This file will be very similar to original `math-lib/pom.xml`, but we can remove
 </project>
 ```
 
-#### Key changes in `math-lib/pom.xml`:
+#### :pushpin: Key changes in `math-lib/pom.xml`:
 
 * ```<parent>```: This section specifies the parent POM.
 * ```<groupId>```, ```<artifactId>```, ```<version>```: Must match the parent POM.
@@ -148,10 +148,23 @@ Similarly, let's update `math-app/pom.xml` to inherit from the parent and adjust
 </project>
 ```
 
-#### Key changes in `math-app/pom.xml`:
+#### :pushpin: Key changes in `math-app/pom.xml`:
 
 * ```<parent>```: This section specifies the parent POM.
 * ```<dependencies><dependency><version>${project.version}</version></dependency>```: Here, we use the `${project.version}` property, which will inherit the version defined in the parent POM. This helps keep the versions of related modules consistent.
 * ```<build>```: This section for maven-jar-plugin and maven-assembly-plugin remains similar.
 
-:clap::beers: Congratulations! You have successfully created a simple Math Library JAR using Maven and then used it in another Maven project. This demonstrates the basic principles of creating and using Maven dependencies.
+
+### Building the MonoRepo:
+
+To build the entire MonoRepo, navigate to the root directory (`mono-repo/`) in your terminal and run Maven commands:
+
+* ```mvn clean install```: This will clean and install both the `math-lib` and `math-app` projects in the correct order (Maven understands the dependencies between modules).
+* ```mvn clean package```: This will package both projects.
+
+:clap::beers: Congratulations! You have successfully created a Math Mono Repo which provides a clean and organized way to manage your related Maven projects within a single repository.
+
+
+## Interesting Reads :
+
+[How to Structure a Java Monorepo using Maven and Github](https://www.transcendsoftware.se/posts/how-to-structure-a-java-monorepo-using-maven-and-github/)
