@@ -107,4 +107,4 @@ After running `mvn install`, Maven will create a directory structure under your 
 └── math-lib-1.0-SNAPSHOT.pom
 ```
 
-:clap::beers: After successful execution, you will find the math-lib-1.0-SNAPSHOT.jar file in the math-lib/target directory, and it will also be installed in your local Maven repository.
+:clap::beers: After successful execution, you will find the `math-lib-1.0-SNAPSHOT.jar` file in the `math-lib/target` directory, and it will also be installed in your local Maven repository.
