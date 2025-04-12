@@ -70,23 +70,22 @@ Inside the math-lib directory, create a file named pom.xml with the following co
     </build>
 </project>
 ```
-Explanation of pom.xml:
+:ledger: Explanation of pom.xml:
 
-```<modelVersion>4.0.0</modelVersion>```: Specifies the Maven POM model version.
-```<groupId>com.example</groupId>```: A unique identifier for your project's group (usually your organization or a logical grouping).
-```<artifactId>math-lib</artifactId>```: A unique identifier for the artifact (the JAR file in this case).
-```<version>1.0-SNAPSHOT</version>```: The version of your library. -SNAPSHOT indicates it's a development version.
-```<packaging>jar</packaging>```: Specifies that the output of this project will be a JAR file.
-```<name>Math Library</name>```: A human-readable name for your project.
-```<properties>```: Defines properties that can be used in the POM. Here, we specify the source and target Java versions for compilation.
-```<build> and <plugins>```: Configure the build process. We include the maven-compiler-plugin to ensure the Java code is compiled with the specified versions.
+* ```<modelVersion>4.0.0</modelVersion>```: Specifies the Maven POM model version.
+* ```<groupId>com.example</groupId>```: A unique identifier for your project's group (usually your organization or a logical grouping).
+* ```<artifactId>math-lib</artifactId>```: A unique identifier for the artifact (the JAR file in this case).
+* ```<version>1.0-SNAPSHOT</version>```: The version of your library. -SNAPSHOT indicates it's a development version.
+* ```<packaging>jar</packaging>```: Specifies that the output of this project will be a JAR file.
+* ```<name>Math Library</name>```: A human-readable name for your project.
+* ```<properties>```: Defines properties that can be used in the POM. Here, we specify the source and target Java versions for compilation.
+* ```<build> and <plugins>```: Configure the build process. We include the maven-compiler-plugin to ensure the Java code is compiled with the specified versions.
 
 ### Step 4: Build and Install the JAR
 
-Open your terminal or command prompt, navigate to the math-lib directory, and run the following Maven command:
+:computer: Open your terminal or command prompt, navigate to the math-lib directory, and run the following Maven command:
 
 ```Bash
-
 mvn clean install
 ```
 
@@ -96,9 +95,7 @@ mvn clean install
 
 ```mvn install```: Compiles the code, runs any tests (if you had them), packages the code into a JAR file, and installs the JAR into your local Maven repository (```~/.m2/repository```).
 
-:clap::beers: After successful execution, you will find the math-lib-1.0-SNAPSHOT.jar file in the math-lib/target directory, and it will also be installed in your local Maven repository.
-
-After running mvn install, Maven will create a directory structure under your ~/.m2/repository that looks like this:
+After running `mvn install`, Maven will create a directory structure under your `~/.m2/repository` that looks like this:
 
 ```
 ~/.m2/repository/
@@ -109,3 +106,5 @@ After running mvn install, Maven will create a directory structure under your ~/
 ├── math-lib-1.0-SNAPSHOT.jar
 └── math-lib-1.0-SNAPSHOT.pom
 ```
+
+:clap::beers: After successful execution, you will find the math-lib-1.0-SNAPSHOT.jar file in the math-lib/target directory, and it will also be installed in your local Maven repository.
